@@ -28,7 +28,6 @@ Funciona com um **backend local** (Node.js) que guarda a sua chave do OpenRouter
 8. [Privacidade e segurança](#8-privacidade-e-segurança)
 9. [Como funciona](#9-como-funciona)
 10. [Desenvolvimento e testes](#10-desenvolvimento-e-testes)
-11. [Estado da entrega e limitações](#11-estado-da-entrega-e-limitações)
 
 ---
 
@@ -58,7 +57,7 @@ Confira com `node -v`.
 5. (Opcional) Revise as configurações de privacidade/retenção de dados da sua conta no OpenRouter. O áudio e os textos
    da transmissão passam por ele e pelo provedor do modelo (Google). Veja [Privacidade](#8-privacidade-e-segurança).
 
-Em seguida, coloque a chave no `.env` (próximo passo).
+Guarde a chave: você vai colocá-la no arquivo `.env` no próximo passo. Não crie o `.env` agora, ele é gerado a partir do `.env.example` lá.
 
 ## 3. Instalar e rodar o backend
 
@@ -66,10 +65,17 @@ Em seguida, coloque a chave no `.env` (próximo passo).
 # dentro da pasta do projeto
 npm install
 
-cp .env.example .env
-# edite o .env e preencha:
-#   OPENROUTER_API_KEY=sk-or-...
+# cria o .env a partir do modelo (-n: nunca sobrescreve um .env que já exista)
+cp -n .env.example .env
 ```
+
+Agora abra o arquivo `.env` que acabou de ser criado e preencha a chave do passo anterior:
+
+```
+OPENROUTER_API_KEY=sk-or-...
+```
+
+> Faça nesta ordem: primeiro o `cp`, depois a edição. Rodar o `cp` depois de preencher o `.env` sem o `-n` apagaria a chave.
 
 Variáveis principais do `.env` (todas as outras têm padrão seguro):
 
@@ -116,8 +122,6 @@ A extensão não está na Chrome Web Store; ela é carregada "sem compactação"
 2. Ative **Modo do desenvolvedor** (canto superior direito).
 3. Clique em **Carregar sem compactação** (*Load unpacked*).
 4. Selecione a pasta **`dist/`** do projeto (não a raiz do projeto).
-   - Se rodar o projeto dentro do WSL, o Chrome do Windows precisa acessar a pasta pelo caminho de rede do WSL
-     (`\\wsl$\<nome-da-distro>\<caminho-do-projeto>\dist`). Rode `wslpath -w dist` no terminal para obter o caminho exato.
 5. O **FactCheck Live** aparece na lista. Clique no ícone de quebra-cabeça da barra do Chrome e **fixe** (📌) a extensão
    para ter o ícone sempre visível.
 
@@ -233,23 +237,3 @@ npm run icons        # regenera os ícones em public/icons
 
 Se a API do OpenRouter divergir da documentação (formato de `input_audio`, plugin `web`, `annotations`), os pontos
 únicos a ajustar são `server/src/openrouter.ts` (`OpenRouterClient.generate`, `parseChatCompletion`).
-
-## 11. Estado da entrega e limitações
-
-| Parte | Estado |
-|---|---|
-| Lógica (sessão, pipeline, assuntos, dedupe, vereditos, filas, backend HTTP, segurança) | ✅ 108 testes passando; `tsc --strict` limpo; build ok |
-| Servidor Fastify inicia e responde (`/health`, erro sem chave) | ✅ testado manualmente |
-| Captura com `chrome.tabCapture` + offscreen + painel lateral no Chrome | ⚠️ **não testada** em navegador real |
-| Chamadas reais ao OpenRouter (áudio, busca web) | ⚠️ **não testadas** (sem chave); formato segue a documentação |
-| Funcionamento com Globoplay | ⚠️ **não testado** |
-
-Limitações conhecidas:
-
-- **Sem AI Mode automático** (não existe API). A busca web é a do OpenRouter; a documentação não garante que seja o Google Search.
-- Latência de ~15–30 s (trechos de 12 s + transcrição + análise + pesquisa). Palavras na fronteira dos trechos podem ser cortadas.
-- Transcrição por LLM: pode errar nomes e números (e isso gera checagens erradas); sem separação de falantes.
-- O veredito vem de um modelo com busca: pode errar ou citar fontes fracas/datadas. Use como **triagem**, não como verdade final.
-- O service worker do Chrome pode ser suspenso; a sessão é persistida e checagens pendentes são retomadas.
-- Backend em outro host exige alterar `host_permissions` em `public/manifest.json`. A captura é por aba.
-- O parâmetro `udm=50` do botão do AI Mode não é documentado pelo Google e pode deixar de funcionar.
