@@ -1,5 +1,7 @@
 # FactCheck Live
 
+![FactCheck Live monitorando uma transmissão no Globoplay, com o painel lateral mostrando a checagem de uma afirmação](images/cover.png)
+
 Extensão para Google Chrome que acompanha o áudio de uma aba (por exemplo, uma transmissão no Globoplay),
 transcreve em português, organiza os **assuntos** e verifica as **afirmações** com busca na web, mostrando tudo em um
 painel lateral com indicadores de veracidade e links para as fontes.
@@ -114,8 +116,8 @@ A extensão não está na Chrome Web Store; ela é carregada "sem compactação"
 2. Ative **Modo do desenvolvedor** (canto superior direito).
 3. Clique em **Carregar sem compactação** (*Load unpacked*).
 4. Selecione a pasta **`dist/`** do projeto (não a raiz do projeto).
-   - No WSL/Windows, use o caminho de rede, por exemplo `\\wsl$\Ubuntu\var\www\ia\factcheck\dist`.
-     Para abrir a pasta no Explorer a partir do WSL: `explorer.exe .`
+   - Se rodar o projeto dentro do WSL, o Chrome do Windows precisa acessar a pasta pelo caminho de rede do WSL
+     (`\\wsl$\<nome-da-distro>\<caminho-do-projeto>\dist`). Rode `wslpath -w dist` no terminal para obter o caminho exato.
 5. O **FactCheck Live** aparece na lista. Clique no ícone de quebra-cabeça da barra do Chrome e **fixe** (📌) a extensão
    para ter o ícone sempre visível.
 
