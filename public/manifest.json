@@ -1,0 +1,13 @@
+{
+  "manifest_version": 3,
+  "name": "FactCheck Live",
+  "version": "0.1.0",
+  "description": "Acompanha o áudio de uma aba, organiza assuntos e verifica afirmações com Google Search.",
+  "minimum_chrome_version": "116",
+  "action": { "default_title": "Abrir FactCheck Live" },
+  "side_panel": { "default_path": "sidepanel.html" },
+  "background": { "service_worker": "background.js", "type": "module" },
+  "permissions": ["tabCapture", "sidePanel", "offscreen", "storage", "activeTab"],
+  "host_permissions": ["http://127.0.0.1:8787/*", "http://localhost:8787/*"],
+  "icons": { "16": "icons/16.png", "48": "icons/48.png", "128": "icons/128.png" }
+}
